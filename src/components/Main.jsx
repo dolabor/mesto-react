@@ -4,7 +4,7 @@ import Card from "./Card.jsx";
 import React from "react";
 import {api} from "../utils/api.js";
 
-function Main({onEditProfile, onAddPlace, onEditAvatar}) {
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   const [userName, setUserName] = React.useState('');
   const [userDescription, setUserDescription] = React.useState('');
   const [userAvatar, setUserAvatar] = React.useState('');
@@ -60,7 +60,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar}) {
             <Card
               key={card._id}
               card={card}
-              // onCardClick = {onCardClick}
+              onCardClick={onCardClick}
               // onCardLike = {onCardLike}
               // onCardDelete = {onCardDelete}
             />

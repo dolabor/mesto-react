@@ -1,12 +1,17 @@
-function ImagePopup({ card, onClose }) {
+import closeIcon from '../images/Close-icon.svg';
+
+function ImagePopup({ card, isOpen, onClose }) {
   return (
-    <section className= {`popup popup_zoom ${card && "popup_opened"}`} id="enlarged-image">
+    <section className= {`popup popup_zoom ${isOpen && "popup_opened"}`} id="enlarged-image">
       <div className="popup__image-container">
-        <button className="button popup__close-button" type="button" aria-label="Закрыть всплывающее окно">
-          <img className="popup__close-button-image" src="../images/Close-icon.svg" alt="Закрыть" />
+        <button className="button popup__close-button"
+                type="button"
+                aria-label="Закрыть всплывающее окно"
+                onClick={onClose}>
+          <img className="popup__close-button-image" src={closeIcon}  alt="Закрыть" />
         </button>
-        <img className="popup__enlarged-photo" src={card ? card.link : ''} alt="#" />
-          <p className="popup__capture" id="popup-capture"></p>
+        <img className="popup__enlarged-photo" src={card ? card.link : ''} alt={`Изображение ${card.name}`} />
+          <p className="popup__capture" id="popup-capture">{`Изображение ${card.name}`}</p>
       </div>
     </section>
   );
