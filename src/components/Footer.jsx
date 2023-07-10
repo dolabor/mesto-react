@@ -5,7 +5,7 @@ let yearOfIssue = new Date();
 function Footer() {
   return (
       <footer className="footer">
-          <p className="footer--copyright">&copy; { yearOfIssue.getFullYear() }. Mesto Russia</p>
+          <p className="footer__copyright">&copy; { yearOfIssue.getFullYear() }. Mesto Russia</p>
       </footer>
   );
 }
