@@ -2,43 +2,21 @@ import editButtonLarge from "../images/edit-button-large.svg";
 import addButtonLarge from "../images/add-button-large.svg";
 import Card from "./Card.jsx";
 import React from "react";
-import {api} from "../utils/api.js";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-
-    api.getProfile()
-      .then((profileData) => {
-        setUserName(profileData.name);
-        setUserDescription(profileData.about);
-        setUserAvatar(profileData.avatar);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  React.useEffect(() => {
-    api.getInitialCards(cards)
-      .then((cardList) => {
-        setCards(cardList);
-      })
-      .catch((err) => console.log(err))
-  }, []);
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardDelete, onCardLike, cards}) {
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main>
       <section className="profile">
         <div className="profile__info">
           <div className="profile__avatar" onClick={onEditAvatar}>
-            <img className="profile__avatar-image" src={userAvatar} alt=""/>
+            <img className="profile__avatar-image" src={currentUser.avatar} alt=""/>
           </div>
           <div className="profile__heading">
             <div className="profile__username">
-              <h1 className="profile__title" id="user__name">{userName}</h1>
+              <h1 className="profile__title" id="user__name">{currentUser.name}</h1>
               <button className="button profile__edit-button"
                       type="button"
                       aria-label="Редактировать профиль"
@@ -46,7 +24,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
                 <img className="profile__edit-icon" src={editButtonLarge} alt="Кнопка редактирования"/>
               </button>
             </div>
-            <p id="user__occupation" className="profile__subtitle">{userDescription}</p>
+            <p id="user__occupation" className="profile__subtitle">{currentUser.about}</p>
           </div>
         </div>
 
@@ -61,8 +39,8 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
               key={card._id}
               card={card}
               onCardClick={onCardClick}
-              // onCardLike = {onCardLike}
-              // onCardDelete = {onCardDelete}
+              onCardDelete = {onCardDelete}
+              onCardLike = {onCardLike}
             />
           )
         })}
