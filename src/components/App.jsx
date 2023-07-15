@@ -9,6 +9,7 @@ import {api} from "../utils/api.js";
 import React from 'react';
 import EditProfilePopup from "./EditProfilePopup.jsx";
 import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 
 function App(props) {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -97,6 +98,15 @@ function App(props) {
       .catch((err) => console.log(err));
   }
 
+  function handleAddPlaceSubmit(data) {
+    api.addNewCard(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
   React.useEffect(() => {
     api.getProfile()
       .then((profileData) => {
@@ -134,35 +144,11 @@ function App(props) {
           onUpdateUser={handleUpdateUser}>
         </EditProfilePopup>
 
-        <PopupWithForm
-          id="add-place-form"
-          title="Новое место"
-          titleButton="Cоздать"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}>
-          <input
-            id="title"
-            className="popup__input"
-            type="text"
-            minLength={2}
-            maxLength={40}
-            placeholder="Название"
-            name="title"
-            required
-          />
-          <span className="popup__input-error popup__input-error_type_title">Вы пропустили это поле.</span>
-          <label htmlFor="title"/>
-          <input
-            id="image-ref"
-            className="popup__occupation popup__input"
-            type="url"
-            placeholder="Ссылка на картинку"
-            name="image-ref"
-            required
-          />
-          <span className="popup__input-error popup__input-error_type_image-ref">Введите адрес сайта.</span>
-          <label htmlFor="image-ref"/>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}>
+        </AddPlacePopup>
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
