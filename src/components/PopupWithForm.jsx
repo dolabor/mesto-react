@@ -1,9 +1,9 @@
 import closeIcon from '../images/Close-icon.svg';
 
-function PopupWithForm({id, title, titleButton, children, isOpen, onClose}) {
+function PopupWithForm({id, title, titleButton, children, isOpen, onClose, onSubmit}) {
   return (
     <section className={`popup ${isOpen && "popup_opened"}`} id={id}>
-      <form className="popup__container" name={id} noValidate>
+      <form className="popup__container" name={id} noValidate onSubmit={onSubmit}>
         <button className="button popup__close-button"
                 type="button"
                 aria-label="Закрыть всплывающее окно"
@@ -12,7 +12,9 @@ function PopupWithForm({id, title, titleButton, children, isOpen, onClose}) {
         </button>
         <h2 className="popup__title">{title}</h2>
         {children}
-        <button className="popup__submit-button button" type="submit" aria-label="Сохранить">{titleButton}</button>
+        <button className="popup__submit-button button" type="submit" aria-label="Сохранить">
+          {titleButton}
+        </button>
       </form>
     </section>
   );

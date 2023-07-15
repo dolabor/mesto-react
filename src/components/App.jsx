@@ -3,10 +3,11 @@ import Footer from "./Footer";
 import Main from "./Main.jsx";
 import PopupWithForm from './PopupWithForm.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
-import {api} from "../utils/api.js";
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { api } from "../utils/api.js";
 
 import React from 'react';
+import EditProfilePopup from "./EditProfilePopup.jsx";
 
 function App(props) {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -18,6 +19,7 @@ function App(props) {
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [selectedToDeleteCard, setSelectedToDeleteCard] = React.useState({});
 
   const [cards, setCards] = React.useState([]);
 
@@ -33,7 +35,8 @@ function App(props) {
     setIsEditAvatarPopupOpen(true);
   }
 
-  function handleDeleteCardClick() {
+  function handleTrashIconClick(card) {
+    setSelectedToDeleteCard(card);
     setIsDeleteCardPopupOpen(true);
   }
 
@@ -51,26 +54,38 @@ function App(props) {
     setIsImagePopupOpen(true);
   }
 
-  // function handleCardLike(card) {
-  //   const isLiked = card.likes.some(i => i._id === currentUser._id);
-  //
-  //   api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-  //     setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-  //   });
-  // }
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-  // function handleCardDelete(evt) {
-  //   evt.preventDefault();
-  //   api.deleteCard(cardToDelete._id).then(() => {
-  //     const newCards = cards.filter((item) => item !== cardToDelete);
-  //     setCards(newCards);
-  //     closeAllPopups();
-  //   },
-  //     (err) => {
-  //     console.log((err))
-  //     }
-  //   )
-  // }
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      },
+      (err) => {
+        console.log(err);
+      });
+  }
+
+  function handleCardDelete(evt) {
+    evt.preventDefault();
+    api.deleteCard(selectedToDeleteCard._id).then(() => {
+        const newCards = cards.filter((item) => item !== selectedToDeleteCard);
+        setCards(newCards);
+        closeAllPopups();
+      },
+      (err) => {
+        console.log((err))
+      }
+    )
+  }
+
+  function handleUpdateUser(data) {
+    api.setUserInfo(data)
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
 
   React.useEffect(() => {
     api.getProfile()
@@ -97,45 +112,17 @@ function App(props) {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
-          onCardDelete={handleDeleteCardClick}
           cards={cards}
-          // onCardLike={}
+          onCardLike={handleCardLike}
+          onCardDelete={handleTrashIconClick}
         />
         <Footer/>
 
-        <PopupWithForm
-          id="edit-profile-form"
-          title="Редактировать профиль"
-          titleButton="Сохранить"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}>
-          <input
-            id="name"
-            className="popup__input"
-            type="text"
-            placeholder="Имя"
-            name="name"
-            defaultValue="Жак-Ив Кусто"
-            minLength={2}
-            maxLength={40}
-            required=""
-          />
-          <span className="popup__input-error popup__input-error_type_name">Вы пропустили это поле.</span>
-          <label htmlFor="name"/>
-          <input
-            id="occupation"
-            className="popup__occupation popup__input"
-            type="text"
-            placeholder="О себе"
-            name="occupation"
-            defaultValue="Исследователь океана"
-            minLength={2}
-            maxLength={200}
-            required=""
-          />
-          <span className="popup__input-error popup__input-error_type_occupation">Вы пропустили это поле.</span>
-          <label htmlFor="occupation"/>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}>
+        </EditProfilePopup>
 
         <PopupWithForm
           id="add-place-form"
@@ -151,7 +138,7 @@ function App(props) {
             maxLength={40}
             placeholder="Название"
             name="title"
-            required=""
+            required
           />
           <span className="popup__input-error popup__input-error_type_title">Вы пропустили это поле.</span>
           <label htmlFor="title"/>
@@ -161,7 +148,7 @@ function App(props) {
             type="url"
             placeholder="Ссылка на картинку"
             name="image-ref"
-            required=""
+            required
           />
           <span className="popup__input-error popup__input-error_type_image-ref">Введите адрес сайта.</span>
           <label htmlFor="image-ref"/>
@@ -190,7 +177,8 @@ function App(props) {
           title="Вы уверены?"
           titleButton="Да"
           isOpen={isDeleteCardPopupOpen}
-          onClose={closeAllPopups}>
+          onClose={closeAllPopups}
+          onSubmit={handleCardDelete}>
         </PopupWithForm>
 
         <ImagePopup

@@ -75,7 +75,7 @@ class Api {
       })
   }
 
-    deleteLike(id) {
+  deleteLike(id) {
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: "DELETE",
       headers: this._headers
@@ -88,7 +88,7 @@ class Api {
       })
   }
 
-   addLike(id) {
+  addLike(id) {
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: "PUT",
       headers: this._headers,
@@ -101,12 +101,37 @@ class Api {
       })
   }
 
-    editAvatar(avatar) {
+  changeLikeCardStatus(id, isLiked) {
+    if (isLiked) {
+      return this.addLike(id);
+    } else {
+      return this.deleteLike(id);
+    }
+  }
+
+  editAvatar(avatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         avatar: avatar
+      })
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Что-то пошло не так: ${res.status}`);
+      })
+  }
+
+  setUserInfo(data) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        about: data.about
       })
     })
       .then((res) => {
