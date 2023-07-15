@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Main from "./Main.jsx";
 import PopupWithForm from './PopupWithForm.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import {api} from "../utils/api.js";
 
 import React from 'react';

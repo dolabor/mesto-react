@@ -2,7 +2,7 @@ import editButtonLarge from "../images/edit-button-large.svg";
 import addButtonLarge from "../images/add-button-large.svg";
 import Card from "./Card.jsx";
 import React from "react";
-import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete}) {
   const currentUser = React.useContext(CurrentUserContext);

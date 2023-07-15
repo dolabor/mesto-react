@@ -1,7 +1,7 @@
 import React from "react";
 import trashDeleteIcon from "../images/Trash.svg";
 import likeIcon from "../images/like.svg";
-import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card({card, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -11,11 +11,11 @@ function Card({card, onCardClick, onCardLike, onCardDelete}) {
     `element__like-button ${isLiked && 'element__like-button_active'}`
   );
 
-  function handleLikeClick(event) {
+  function handleLikeClick(evt) {
     onCardLike(card);
   }
 
-  function handleDeleteClick(event) {
+  function handleDeleteClick(evt) {
     onCardDelete(card);
   }
 
