@@ -3,11 +3,12 @@ import Footer from "./Footer";
 import Main from "./Main.jsx";
 import PopupWithForm from './PopupWithForm.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { api } from "../utils/api.js";
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
+import {api} from "../utils/api.js";
 
 import React from 'react';
 import EditProfilePopup from "./EditProfilePopup.jsx";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 function App(props) {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -87,6 +88,15 @@ function App(props) {
       .catch((err) => console.log(err));
   }
 
+  function handleUpdateAvatar(data) {
+    api.editAvatar(data)
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
   React.useEffect(() => {
     api.getProfile()
       .then((profileData) => {
@@ -154,23 +164,11 @@ function App(props) {
           <label htmlFor="image-ref"/>
         </PopupWithForm>
 
-        <PopupWithForm
-          id="popup-change-avatar"
-          title="Обновить аватар"
-          titleButton="Сохранить"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}>
-          <input
-            id="avatar-ref"
-            className="popup__input"
-            type="url"
-            placeholder="Ссылка на аватар"
-            name="avatar-ref"
-            required=""
-          />
-          <span className="popup__input-error popup__input-error_type_avatar-ref">Введите URL.</span>
-          <label htmlFor="avatar-ref"/>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}>
+        </EditAvatarPopup>
 
         <PopupWithForm
           id="popup-confirm-delete"
