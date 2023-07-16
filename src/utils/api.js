@@ -8,24 +8,14 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   editProfile(name, about) {
@@ -37,12 +27,7 @@ class Api {
         about
       })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   addNewCard(data) {
@@ -54,12 +39,7 @@ class Api {
         link: data.link
       })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   deleteCard(id) {
@@ -67,12 +47,7 @@ class Api {
       method: "DELETE",
       headers: this._headers
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   deleteLike(id) {
@@ -80,12 +55,7 @@ class Api {
       method: "DELETE",
       headers: this._headers
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   addLike(id) {
@@ -93,12 +63,7 @@ class Api {
       method: "PUT",
       headers: this._headers,
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   changeLikeCardStatus(id, isLiked) {
@@ -117,12 +82,7 @@ class Api {
         avatar: data.avatar
       })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
   }
 
   setUserInfo(data) {
@@ -134,12 +94,11 @@ class Api {
         about: data.about
       })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Что-то пошло не так: ${res.status}`);
-      })
+      .then(res => this._checkResponse(res))
+  }
+
+  _checkResponse(res) {
+    return res.ok ? res.json() : Promise.reject('Ошибка')
   }
 }
 

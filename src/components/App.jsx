@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Main from "./Main.jsx";
 import PopupWithForm from './PopupWithForm.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 import {api} from "../utils/api.js";
 
 import React from 'react';
@@ -21,7 +21,6 @@ function App(props) {
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState({});
-  const [selectedToDeleteCard, setSelectedToDeleteCard] = React.useState({});
 
   const [cards, setCards] = React.useState([]);
 
@@ -38,7 +37,7 @@ function App(props) {
   }
 
   function handleTrashIconClick(card) {
-    setSelectedToDeleteCard(card);
+    setSelectedCard(card);
     setIsDeleteCardPopupOpen(true);
   }
 
@@ -59,25 +58,22 @@ function App(props) {
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      },
-      (err) => {
-        console.log(err);
-      });
+      })
+      .catch((err) => console.log(err));
   }
 
   function handleCardDelete(evt) {
     evt.preventDefault();
-    api.deleteCard(selectedToDeleteCard._id).then(() => {
-        const newCards = cards.filter((item) => item !== selectedToDeleteCard);
+    api.deleteCard(selectedCard._id)
+      .then(() => {
+        const newCards = cards.filter((item) => item !== selectedCard);
         setCards(newCards);
         closeAllPopups();
-      },
-      (err) => {
-        console.log((err))
-      }
-    )
+      })
+      .catch((err) => console.log(err))
   }
 
   function handleUpdateUser(data) {

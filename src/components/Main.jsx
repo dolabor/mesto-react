@@ -2,7 +2,7 @@ import editButtonLarge from "../images/edit-button-large.svg";
 import addButtonLarge from "../images/add-button-large.svg";
 import Card from "./Card.jsx";
 import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete}) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -12,7 +12,11 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCa
       <section className="profile">
         <div className="profile__info">
           <div className="profile__avatar" onClick={onEditAvatar}>
-            <img className="profile__avatar-image" src={currentUser.avatar} alt=""/>
+            <img
+              className="profile__avatar-image"
+              src={currentUser.avatar}
+              alt={`Аватар пользователя ${currentUser.name}`}
+            />
           </div>
           <div className="profile__heading">
             <div className="profile__username">

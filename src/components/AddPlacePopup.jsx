@@ -31,10 +31,11 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
         className="popup__input"
         type="text"
         minLength={2}
-        maxLength={40}
+        maxLength={30}
         placeholder="Название"
         name="title"
         onChange={handlePlaceTitleChange}
+        value={name || ''}
         required
       />
       <span className="popup__input-error popup__input-error_type_title">Вы пропустили это поле.</span>
@@ -46,6 +47,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
         placeholder="Ссылка на картинку"
         name="image-ref"
         onChange={handlePlaceLinkChange}
+        value={link || ''}
         required
       />
       <span className="popup__input-error popup__input-error_type_image-ref">Введите адрес сайта.</span>
